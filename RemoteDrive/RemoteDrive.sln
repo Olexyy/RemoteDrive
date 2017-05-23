@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDrive", "RemoteDrive\RemoteDrive.csproj", "{1DFF14AB-2C34-484B-B667-E8527144279F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DC003B5A-C917-40DA-AD67-F4856F4B6029} = {DC003B5A-C917-40DA-AD67-F4856F4B6029}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDriveService", "RemoteDriveService\RemoteDriveService.csproj", "{DC003B5A-C917-40DA-AD67-F4856F4B6029}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DFF14AB-2C34-484B-B667-E8527144279F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DFF14AB-2C34-484B-B667-E8527144279F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DFF14AB-2C34-484B-B667-E8527144279F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DFF14AB-2C34-484B-B667-E8527144279F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC003B5A-C917-40DA-AD67-F4856F4B6029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC003B5A-C917-40DA-AD67-F4856F4B6029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC003B5A-C917-40DA-AD67-F4856F4B6029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC003B5A-C917-40DA-AD67-F4856F4B6029}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
