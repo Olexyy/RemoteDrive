@@ -118,12 +118,6 @@ namespace FtpClient
             }
             Task.Run( () => this.GetCwdProcess(this.Cwd.FullPath) );
         }
-        /*public void GetCwd(string folder)
-        {
-            this.Cwd.Root = this.Cwd.FullPath;
-            this.Cwd.FullPath = this.Cwd.FullPath + "/" + folder;
-            Task.Run(() => this.GetCwdProcess(this.Cwd.FullPath));
-        }*/
         private void GetCwdProcess(string cwdPath)
         {
             try
