@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="Z2ibcytRqbFqB9xGDpRYFVZpETI=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="/B6LNVtxL+/e27lHfx00vx2t2no=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="wsHttpBinding" name="WSHttpBinding_IService">
       <properties>
@@ -127,10 +127,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="WSHttpBinding_IService" contract="ServiceReference.IService" bindingType="wsHttpBinding" address="http://localhost:63855/Service.svc/user" bindingConfiguration="WSHttpBinding_IService">
+    <endpoint name="WSHttpBinding_IService" contract="ServiceReference.IService" bindingType="wsHttpBinding" address="http://www.webdrive.somee.com/Service.svc/user" bindingConfiguration="WSHttpBinding_IService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://localhost:63855/Service.svc/user</serializedValue>
+          <serializedValue>http://www.webdrive.somee.com/Service.svc/user</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

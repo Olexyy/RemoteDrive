@@ -147,6 +147,49 @@ namespace FtpClient
                 throw new Exception("List directory fail.", e);
             }
         }
+        public void Update(string localPath, string remotePath)
+        {
+            if(File.Exists(localPath))
+                Task.Run(() => this.UpdateProcess(remotePath, localPath));
+        }
+        public void UpdateProcess(string ftpPath, string localPath)
+        {
+            Stream upload = null;
+            FileStream local = null;
+            FtpWebResponse response = null;
+            FtpWebRequest ftpRequest = null;
+            try
+            {
+                ftpRequest = this.Factory.FtpRequestNew(WebRequestMethods.Ftp.DeleteFile, ftpPath);
+                response = (FtpWebResponse)ftpRequest.GetResponse();
+            } catch (Exception ex) { /* TODO handle in special event.*/ }
+            try {
+                ftpRequest = this.Factory.FtpRequestNew(WebRequestMethods.Ftp.UploadFile, ftpPath);
+                upload = ftpRequest.GetRequestStream();
+                local = File.Open(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                byte[] byteBuffer = new byte[BufferSize];
+                int bytesSent = local.Read(byteBuffer, 0, BufferSize);
+                while (bytesSent != 0)
+                {
+                    upload.Write(byteBuffer, 0, bytesSent);
+                    bytesSent = local.Read(byteBuffer, 0, BufferSize);
+                }
+                FtpEventArgs args = new FtpEventArgs(FtpEventType.UploadOk, this.Cwd);
+                if (this.FtpEvent != null)
+                    this.FtpEvent(this, args);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Upload fail.", e);
+            }
+            finally
+            {
+                if (upload != null)
+                    upload.Close();
+                if (local != null)
+                    local.Close();
+            }
+        }
         public void Upload(LocalItem localItem)
         {
             if(localItem.Type == LocalItemType.File)
@@ -160,7 +203,7 @@ namespace FtpClient
             {
                 FtpWebRequest ftpRequest = this.Factory.FtpRequestNew(WebRequestMethods.Ftp.UploadFile, ftpPath);
                 upload = ftpRequest.GetRequestStream();
-                local = File.Open(localPath, FileMode.Open);
+                local = File.Open(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 byte[] byteBuffer = new byte[BufferSize];
                 int bytesSent = local.Read(byteBuffer, 0, BufferSize);
                 while (bytesSent != 0)
@@ -224,9 +267,17 @@ namespace FtpClient
                     local.Close();
             }
         }
+        public void DeleteFile(string ftpPath)
+        {
+            Task.Run(() => this.DeleteFileProcess(ftpPath));
+        }
+        public void DeleteFolder(string ftpPath)
+        {
+            Task.Run(() => this.DeleteFolderProcess(ftpPath));
+        }
         public void Delete(FtpItem item = null)
         {
-            if (item == null) ;
+            if (item == null) return;
             else if (item.Type == FtpItemType.Folder)
               Task.Run(() => this.DeleteFolderProcess(item.FullPath));
             else if (item.Type == FtpItemType.File)
@@ -244,7 +295,7 @@ namespace FtpClient
                     this.FtpEvent(this, args);
             }
             catch(Exception e)
-            {
+            { // Change to event
                 throw new Exception("Delete fail.", e);
             }
             finally
@@ -273,6 +324,10 @@ namespace FtpClient
                 if (response != null)
                     response.Close();
             }
+        }
+        public void CreateDirectory(string ftpPath)
+        {
+            Task.Run(() => this.NewFolderProcess(ftpPath));
         }
         public void NewFolder(string name)
         {

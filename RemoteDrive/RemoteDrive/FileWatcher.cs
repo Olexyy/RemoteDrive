@@ -5,23 +5,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RemoteDrive1
+//https://msdn.microsoft.com/en-us/library/system.io.filesystemeventargs(v=vs.110).aspx
+namespace RemoteDrive
 {
-    class FileWatcher
+    public class FileWatcher
     {
-        private void watch(string path)
+        private FileSystemWatcher FileSystemWatcher { get; set; }
+        public bool Started { get; private set; }
+
+        public FileWatcher(string path, FileSystemEventHandler onChanged, FileSystemEventHandler onCreated,
+            FileSystemEventHandler onDeleted, RenamedEventHandler onRenamed)
         {
-            FileSystemWatcher watcher = new FileSystemWatcher();
-            watcher.Path = path;
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Filter = "*.*";
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.EnableRaisingEvents = true;
+            this.FileSystemWatcher = new FileSystemWatcher();
+            this.FileSystemWatcher.Path = path;
+            this.FileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            this.FileSystemWatcher.Filter = "*.*";
+            this.FileSystemWatcher.Created += new FileSystemEventHandler(onCreated);
+            this.FileSystemWatcher.Changed += new FileSystemEventHandler(onChanged);
+            this.FileSystemWatcher.Deleted += new FileSystemEventHandler(onDeleted);
+            this.FileSystemWatcher.Renamed += new RenamedEventHandler(onRenamed);
         }
 
-        private void OnChanged(object sender, FileSystemEventArgs e)
+        public void Start()
         {
-            throw new NotImplementedException();
+            this.FileSystemWatcher.EnableRaisingEvents = true;
+            this.Started = true;
+        }
+
+        public void Stop()
+        {
+            this.FileSystemWatcher.EnableRaisingEvents = false;
+            this.Started = false;
         }
     }
 }

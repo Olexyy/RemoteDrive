@@ -69,6 +69,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxRepoBrowser = new System.Windows.Forms.GroupBox();
+            this.buttonWatch = new System.Windows.Forms.Button();
             this.contextMenuRemote.SuspendLayout();
             this.contextMenuLocal.SuspendLayout();
             this.contextMenuMain.SuspendLayout();
@@ -108,38 +109,38 @@
             // menuItemDownloadRemote
             // 
             this.menuItemDownloadRemote.Name = "menuItemDownloadRemote";
-            this.menuItemDownloadRemote.Size = new System.Drawing.Size(152, 22);
+            this.menuItemDownloadRemote.Size = new System.Drawing.Size(132, 22);
             this.menuItemDownloadRemote.Text = "Download";
             this.menuItemDownloadRemote.Click += new System.EventHandler(this.menuItemDownloadRemote_Click);
             // 
             // menuItemDeleteRemote
             // 
             this.menuItemDeleteRemote.Name = "menuItemDeleteRemote";
-            this.menuItemDeleteRemote.Size = new System.Drawing.Size(152, 22);
+            this.menuItemDeleteRemote.Size = new System.Drawing.Size(132, 22);
             this.menuItemDeleteRemote.Text = "Delete";
             this.menuItemDeleteRemote.Click += new System.EventHandler(this.menuItemDeleteRemote_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(129, 6);
             // 
             // menuItemNewFolderRemote
             // 
             this.menuItemNewFolderRemote.Name = "menuItemNewFolderRemote";
-            this.menuItemNewFolderRemote.Size = new System.Drawing.Size(152, 22);
+            this.menuItemNewFolderRemote.Size = new System.Drawing.Size(132, 22);
             this.menuItemNewFolderRemote.Text = "New folder";
             this.menuItemNewFolderRemote.Click += new System.EventHandler(this.menuItemNewFolderRemote_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(129, 6);
             // 
             // menuItemRefreshRemote
             // 
             this.menuItemRefreshRemote.Name = "menuItemRefreshRemote";
-            this.menuItemRefreshRemote.Size = new System.Drawing.Size(152, 22);
+            this.menuItemRefreshRemote.Size = new System.Drawing.Size(132, 22);
             this.menuItemRefreshRemote.Text = "Refresh";
             // 
             // listViewLocal
@@ -227,7 +228,7 @@
             // 
             this.textBoxCwdRemote.Location = new System.Drawing.Point(12, 317);
             this.textBoxCwdRemote.Name = "textBoxCwdRemote";
-            this.textBoxCwdRemote.Size = new System.Drawing.Size(267, 20);
+            this.textBoxCwdRemote.Size = new System.Drawing.Size(256, 20);
             this.textBoxCwdRemote.TabIndex = 7;
             // 
             // textBoxCwdLocal
@@ -240,9 +241,9 @@
             // 
             // buttonRefresh
             // 
-            this.buttonRefresh.Location = new System.Drawing.Point(285, 315);
+            this.buttonRefresh.Location = new System.Drawing.Point(274, 314);
             this.buttonRefresh.Name = "buttonRefresh";
-            this.buttonRefresh.Size = new System.Drawing.Size(97, 23);
+            this.buttonRefresh.Size = new System.Drawing.Size(53, 23);
             this.buttonRefresh.TabIndex = 6;
             this.buttonRefresh.Text = "Refresh";
             this.buttonRefresh.UseVisualStyleBackColor = true;
@@ -277,7 +278,7 @@
             // 
             // buttonBack
             // 
-            this.buttonBack.Location = new System.Drawing.Point(388, 315);
+            this.buttonBack.Location = new System.Drawing.Point(388, 314);
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(40, 23);
             this.buttonBack.TabIndex = 13;
@@ -372,6 +373,7 @@
             // 
             // groupBoxRepoBrowser
             // 
+            this.groupBoxRepoBrowser.Controls.Add(this.buttonWatch);
             this.groupBoxRepoBrowser.Controls.Add(this.buttonRefresh);
             this.groupBoxRepoBrowser.Controls.Add(this.buttonOpen);
             this.groupBoxRepoBrowser.Controls.Add(this.listViewLocal);
@@ -385,6 +387,16 @@
             this.groupBoxRepoBrowser.Size = new System.Drawing.Size(772, 344);
             this.groupBoxRepoBrowser.TabIndex = 18;
             this.groupBoxRepoBrowser.TabStop = false;
+            // 
+            // buttonWatch
+            // 
+            this.buttonWatch.Location = new System.Drawing.Point(333, 314);
+            this.buttonWatch.Name = "buttonWatch";
+            this.buttonWatch.Size = new System.Drawing.Size(49, 23);
+            this.buttonWatch.TabIndex = 14;
+            this.buttonWatch.Text = "Watch";
+            this.buttonWatch.UseVisualStyleBackColor = true;
+            this.buttonWatch.Click += new System.EventHandler(this.buttonWatch_Click);
             // 
             // RemoteDriveForm
             // 
@@ -454,6 +466,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuItemRefreshRemote;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.Button buttonWatch;
     }
 }
 

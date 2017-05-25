@@ -16,15 +16,19 @@ namespace RemoteDrive
         private Local Local { get; set; }
         private ServiceClient ServiceClient { get; set; }
         private User User { get; set; }
+        private FileWatcher FileWatcher { get; set; }
+        private FtpPath FtpPath { get; set; }
         private void InitializeFtp()
         {
             this.notifyIcon.Icon = Resource.media_white;
-            string host = ConfigurationManager.AppSettings["ftpHost"];
+             string host = ConfigurationManager.AppSettings["ftpHost"];
             string login = ConfigurationManager.AppSettings["ftpLogin"];
             string password = ConfigurationManager.AppSettings["ftpPassword"];
-            string serverRoot = @"ftp://" + host + @"/" + host + @"/Repositories/" + Hashing.GetHashString(User.Email);
-            this.Ftp = new Ftp(serverRoot, login, password, this.FtpEventHandler);
-            this.Ftp.InitCwd(serverRoot);
+            this.FtpPath = new FtpPath(@"ftp://" + host, host + @"/Repositories", Hashing.GetHashString(User.Email));
+            string userRoot = @"ftp://" + host + @"/" + host + @"/Repositories/" + Hashing.GetHashString(User.Email);
+            // TODO: change to ftppath handle user root
+            this.Ftp = new Ftp(userRoot, login, password, this.FtpEventHandler);
+            this.Ftp.InitCwd(userRoot);
         }
         private void InitializeLocal()
         {
@@ -290,6 +294,59 @@ namespace RemoteDrive
             this.Ftp.NewFolder("New_folder");
         }
 
+        private void buttonWatch_Click(object sender, EventArgs e)
+        {
+            if(this.FileWatcher == null || !this.FileWatcher.Started)
+            {
+                if (this.FileWatcher == null)
+                    this.FileWatcher = new FileWatcher(User.Root, this.OnFileChanged, this.OnFileCreated,
+                        this.OnFileDeleted, this.OnFileRenamed);
+                this.FileWatcher.Start();
+                this.buttonWatch.Text = "Stop";
+            }
+            else
+            {
+                this.FileWatcher.Stop();
+                this.buttonWatch.Text = "Watch";
+            }
+        }
+        #endregion
+
+        #region File watcher handlers
+        private void OnFileChanged(object source, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Changed)
+            {
+                this.notifyIcon.Icon = Resource.media_white;
+                this.Ftp.Update(e.FullPath, this.FtpPath.Resolve(e.FullPath));
+            }
+        }
+        private void OnFileCreated(object source, FileSystemEventArgs e)
+        { // We react on directory events only, no files.
+            if (e.ChangeType == WatcherChangeTypes.Created)
+            {
+                this.notifyIcon.Icon = Resource.media_white;
+                if (Directory.Exists(e.FullPath))
+                    this.Ftp.CreateDirectory(this.FtpPath.Resolve(e.FullPath));
+                this.Local.Cwd.GetCwd();
+            }
+        }
+        private void OnFileDeleted(object source, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Deleted)
+            {
+                this.notifyIcon.Icon = Resource.media_white;
+                if (!String.IsNullOrEmpty(Path.GetExtension(e.Name)))
+                    this.Ftp.DeleteFile(this.FtpPath.Resolve(e.FullPath));
+                else this.Ftp.DeleteFolder(this.FtpPath.Resolve(e.FullPath));
+                this.Local.Cwd.GetCwd();
+            }
+        }
+        private void OnFileRenamed(object source, RenamedEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Renamed)
+                throw new NotImplementedException();
+        }
         #endregion
     }
 }

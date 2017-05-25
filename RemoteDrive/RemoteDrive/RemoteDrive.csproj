@@ -94,6 +94,7 @@
       <DependentUpon>AuthorizeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FileWatcher.cs" />
+    <Compile Include="FtpPath.cs" />
     <Compile Include="Local.cs" />
     <Compile Include="Hashing.cs" />
     <Compile Include="PatternComposite.cs" />
