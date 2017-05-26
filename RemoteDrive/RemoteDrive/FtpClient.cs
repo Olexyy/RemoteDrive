@@ -221,6 +221,33 @@ namespace FtpClient
                     local.Close();
             }
         }
+        public void CreateFileOnly(string remotePath)
+        {
+            Task.Run(() => this.CreateFileOnlyProcess(remotePath));
+        }
+        public void CreateFileOnlyProcess(string ftpPath)
+        {
+            Stream upload = null;
+            FtpWebRequest ftpRequest = null;
+            try
+            {
+                ftpRequest = this.Factory.FtpRequestNew(WebRequestMethods.Ftp.UploadFile, ftpPath);
+                upload = ftpRequest.GetRequestStream();
+                // todo special event
+                FtpEventArgs args = new FtpEventArgs(FtpEventType.UploadOk, this.Cwd);
+                if (this.FtpEvent != null)
+                    this.FtpEvent(this, args);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Upload fail.", e);
+            }
+            finally
+            {
+                if (upload != null)
+                    upload.Close();;
+            }
+        }
         public void Download(FtpItem ftpItem, LocalCwd localCwd, string newName = null)
         {
             newName = (newName == null) ? ftpItem.Name : newName;

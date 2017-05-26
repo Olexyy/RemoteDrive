@@ -44,17 +44,22 @@
             this.contextMenuLocal = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuItemOpenLocal = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuItemOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemUploadLocal = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemDeleteLocal = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemNewFolderLocal = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemFolderName = new System.Windows.Forms.ToolStripTextBox();
+            this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemFileName = new System.Windows.Forms.ToolStripTextBox();
+            this.menuItemCreateFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemRefreshLocal = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxCwdRemote = new System.Windows.Forms.TextBox();
             this.textBoxCwdLocal = new System.Windows.Forms.TextBox();
             this.buttonRefresh = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.buttonOpen = new System.Windows.Forms.Button();
+            this.buttonPull = new System.Windows.Forms.Button();
             this.buttonGo = new System.Windows.Forms.Button();
             this.buttonBack = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -67,9 +72,12 @@
             this.menuItemLogOut = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuItemAutoStart = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxRepoBrowser = new System.Windows.Forms.GroupBox();
             this.buttonWatch = new System.Windows.Forms.Button();
+            this.createFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuRemote.SuspendLayout();
             this.contextMenuLocal.SuspendLayout();
             this.contextMenuMain.SuspendLayout();
@@ -78,6 +86,7 @@
             // 
             // listViewFtp
             // 
+            this.listViewFtp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listViewFtp.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnFtpFileName});
             this.listViewFtp.ContextMenuStrip = this.contextMenuRemote;
@@ -166,14 +175,16 @@
             this.contextMenuLocal.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemOpenLocal,
             this.toolStripSeparator4,
+            this.menuItemOpen,
             this.menuItemUploadLocal,
             this.menuItemDeleteLocal,
             this.toolStripSeparator7,
             this.menuItemNewFolderLocal,
+            this.newFileToolStripMenuItem,
             this.toolStripSeparator3,
             this.menuItemRefreshLocal});
             this.contextMenuLocal.Name = "contextMenuLocal";
-            this.contextMenuLocal.Size = new System.Drawing.Size(171, 132);
+            this.contextMenuLocal.Size = new System.Drawing.Size(171, 198);
             // 
             // menuItemOpenLocal
             // 
@@ -186,6 +197,13 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(167, 6);
+            // 
+            // menuItemOpen
+            // 
+            this.menuItemOpen.Name = "menuItemOpen";
+            this.menuItemOpen.Size = new System.Drawing.Size(170, 22);
+            this.menuItemOpen.Text = "Open";
+            this.menuItemOpen.Click += new System.EventHandler(this.menuItemOpen_Click);
             // 
             // menuItemUploadLocal
             // 
@@ -208,10 +226,43 @@
             // 
             // menuItemNewFolderLocal
             // 
+            this.menuItemNewFolderLocal.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemFolderName,
+            this.createFolderToolStripMenuItem});
             this.menuItemNewFolderLocal.Name = "menuItemNewFolderLocal";
             this.menuItemNewFolderLocal.Size = new System.Drawing.Size(170, 22);
             this.menuItemNewFolderLocal.Text = "New folder";
-            this.menuItemNewFolderLocal.Click += new System.EventHandler(this.menuItemNewFolderLocal_Click);
+            // 
+            // menuItemFolderName
+            // 
+            this.menuItemFolderName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.menuItemFolderName.Name = "menuItemFolderName";
+            this.menuItemFolderName.Size = new System.Drawing.Size(100, 23);
+            this.menuItemFolderName.Text = "Name...";
+            // 
+            // newFileToolStripMenuItem
+            // 
+            this.newFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemFileName,
+            this.menuItemCreateFile});
+            this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
+            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.newFileToolStripMenuItem.Text = "New file";
+            // 
+            // menuItemFileName
+            // 
+            this.menuItemFileName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.menuItemFileName.Name = "menuItemFileName";
+            this.menuItemFileName.Size = new System.Drawing.Size(100, 23);
+            this.menuItemFileName.Text = "Name...";
+            // 
+            // menuItemCreateFile
+            // 
+            this.menuItemCreateFile.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.menuItemCreateFile.Name = "menuItemCreateFile";
+            this.menuItemCreateFile.Size = new System.Drawing.Size(160, 22);
+            this.menuItemCreateFile.Text = "Create File";
+            this.menuItemCreateFile.Click += new System.EventHandler(this.menuItemCreateFile_Click);
             // 
             // toolStripSeparator3
             // 
@@ -230,6 +281,7 @@
             this.textBoxCwdRemote.Name = "textBoxCwdRemote";
             this.textBoxCwdRemote.Size = new System.Drawing.Size(256, 20);
             this.textBoxCwdRemote.TabIndex = 7;
+            this.textBoxCwdRemote.Visible = false;
             // 
             // textBoxCwdLocal
             // 
@@ -256,15 +308,15 @@
             this.statusStrip1.TabIndex = 10;
             this.statusStrip1.Text = "statusStrip";
             // 
-            // buttonOpen
+            // buttonPull
             // 
-            this.buttonOpen.Location = new System.Drawing.Point(693, 314);
-            this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(68, 23);
-            this.buttonOpen.TabIndex = 11;
-            this.buttonOpen.Text = "Set Local";
-            this.buttonOpen.UseVisualStyleBackColor = true;
-            this.buttonOpen.Click += new System.EventHandler(this.buttonCooseCwd_Click);
+            this.buttonPull.Location = new System.Drawing.Point(693, 314);
+            this.buttonPull.Name = "buttonPull";
+            this.buttonPull.Size = new System.Drawing.Size(68, 23);
+            this.buttonPull.TabIndex = 11;
+            this.buttonPull.Text = "Pull";
+            this.buttonPull.UseVisualStyleBackColor = true;
+            this.buttonPull.Click += new System.EventHandler(this.buttonPull_Click);
             // 
             // buttonGo
             // 
@@ -303,9 +355,11 @@
             this.menuItemLogOut,
             this.menuItemAbout,
             this.toolStripSeparator2,
+            this.menuItemAutoStart,
+            this.toolStripSeparator5,
             this.menuItemExit});
             this.contextMenuMain.Name = "contextMenuMain";
-            this.contextMenuMain.Size = new System.Drawing.Size(149, 126);
+            this.contextMenuMain.Size = new System.Drawing.Size(149, 154);
             // 
             // menuItemMainWindow
             // 
@@ -364,6 +418,18 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(145, 6);
             // 
+            // menuItemAutoStart
+            // 
+            this.menuItemAutoStart.Name = "menuItemAutoStart";
+            this.menuItemAutoStart.Size = new System.Drawing.Size(148, 22);
+            this.menuItemAutoStart.Text = "Autostart";
+            this.menuItemAutoStart.Click += new System.EventHandler(this.menuItemAutoStart_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(145, 6);
+            // 
             // menuItemExit
             // 
             this.menuItemExit.Name = "menuItemExit";
@@ -375,7 +441,7 @@
             // 
             this.groupBoxRepoBrowser.Controls.Add(this.buttonWatch);
             this.groupBoxRepoBrowser.Controls.Add(this.buttonRefresh);
-            this.groupBoxRepoBrowser.Controls.Add(this.buttonOpen);
+            this.groupBoxRepoBrowser.Controls.Add(this.buttonPull);
             this.groupBoxRepoBrowser.Controls.Add(this.listViewLocal);
             this.groupBoxRepoBrowser.Controls.Add(this.buttonGo);
             this.groupBoxRepoBrowser.Controls.Add(this.listViewFtp);
@@ -397,6 +463,14 @@
             this.buttonWatch.Text = "Watch";
             this.buttonWatch.UseVisualStyleBackColor = true;
             this.buttonWatch.Click += new System.EventHandler(this.buttonWatch_Click);
+            // 
+            // createFolderToolStripMenuItem
+            // 
+            this.createFolderToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.createFolderToolStripMenuItem.Name = "createFolderToolStripMenuItem";
+            this.createFolderToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.createFolderToolStripMenuItem.Text = "Create Folder";
+            this.createFolderToolStripMenuItem.Click += new System.EventHandler(this.createFolderToolStripMenuItem_Click);
             // 
             // RemoteDriveForm
             // 
@@ -435,7 +509,7 @@
         private System.Windows.Forms.TextBox textBoxCwdLocal;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.Button buttonRefresh;
-        private System.Windows.Forms.Button buttonOpen;
+        private System.Windows.Forms.Button buttonPull;
         private System.Windows.Forms.Button buttonGo;
         private System.Windows.Forms.Button buttonBack;
         private System.Windows.Forms.NotifyIcon notifyIcon;
@@ -467,6 +541,14 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.Button buttonWatch;
+        private System.Windows.Forms.ToolStripMenuItem menuItemAutoStart;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem newFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox menuItemFileName;
+        private System.Windows.Forms.ToolStripMenuItem menuItemCreateFile;
+        private System.Windows.Forms.ToolStripMenuItem menuItemOpen;
+        private System.Windows.Forms.ToolStripTextBox menuItemFolderName;
+        private System.Windows.Forms.ToolStripMenuItem createFolderToolStripMenuItem;
     }
 }
 

@@ -126,6 +126,37 @@ namespace FtpClient
             }
             finally { }
         }
+        public void DeleteAll()
+        {
+            try
+            {
+                foreach (LocalItem localItem in this.Items)
+                {
+                    if (localItem.Type == LocalItemType.Folder)
+                        Directory.Delete(localItem.FullPath, true);
+                    else
+                        File.Delete(localItem.FullPath);
+                }
+                this.GetChildren();
+                if (this.LocalEvent != null)
+                    // TODO: special event 
+                    this.LocalEvent(this, new LocalEventArgs(LocalEventType.DeleteFileOk, this));
+            }
+            finally { }
+        }
+        public void AddFile(string name = null)
+        {
+            try
+            {
+                name = (name == null) ? "New_file.txt" : name;
+                using (FileStream file = File.Create(Path.Combine(this.FullPath, name))) { }
+                    this.GetChildren();
+                if (this.LocalEvent != null)
+                    // TODO specioal event
+                    this.LocalEvent(this, new LocalEventArgs(LocalEventType.MakeDirectoryOk, this));
+            }
+            finally { }
+        }
         public void AddFolder(string name = null)
         {
             try

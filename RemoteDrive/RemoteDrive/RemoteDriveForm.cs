@@ -7,6 +7,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Drawing;
 using RemoteDrive.Properties;
+using System.Runtime.InteropServices;
 
 namespace RemoteDrive
 {
@@ -38,14 +39,7 @@ namespace RemoteDrive
         {
             this.InitializeComponent();
             this.ServiceClient = new ServiceClient();
-        }
-        private void listView_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (this.listViewFtp.SelectedItems.Count == 1)
-            {
-                FtpItem item = this.listViewFtp.SelectedItems[0].Tag as FtpItem;
-                this.Ftp.GetCwd(item);
-            }
+            this.ManageAutostart();
         }
         private void LocalEventHandler(object sender, LocalEventArgs args)
         {
@@ -86,27 +80,66 @@ namespace RemoteDrive
                 }));
             }
         }
+
+        #region Custom functions
+
         private void AddItemLocal(LocalItem item)
         {
             ListViewItem listViewItem = new ListViewItem(item.Name);
             listViewItem.Tag = item;
             this.listViewLocal.Items.Add(listViewItem);
         }
+
         private void AddItem(FtpItem item)
         {
             ListViewItem listViewItem = new ListViewItem(item.Name);
             listViewItem.Tag = item;
             this.listViewFtp.Items.Add(listViewItem);
         }
-        private void buttonCooseCwd_Click(object sender, EventArgs e)
+
+        private void SetLoggedInState(bool enabled = true)
         {
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (enabled)
             {
-                this.textBoxCwdLocal.Text = dialog.SelectedPath;
-                this.Local.Cwd.GetCwd(dialog.SelectedPath);
+                this.menuItemMainWindow.Enabled = true;
+                this.menuItemAuthorize.Visible = false;
+                this.menuItemLogOut.Visible = true;
+            }
+            else
+            {
+                this.menuItemMainWindow.Enabled = false;
+                this.menuItemAuthorize.Visible = true;
+                this.menuItemLogOut.Visible = false;
             }
         }
+        private bool IsLoggedIn()
+        {
+            return this.User != null;
+        }
+        #endregion
+
+        #region Context menus and buttons handlers
+
+        private void listView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.listViewFtp.SelectedItems.Count == 1)
+            {
+                FtpItem item = this.listViewFtp.SelectedItems[0].Tag as FtpItem;
+                this.Ftp.GetCwd(item);
+            }
+        }
+
+        private void buttonPull_Click(object sender, EventArgs e)
+        {
+            if (this.Local.Cwd.Items.Count > 0)
+                MessageBox.Show("Local directory not empty and will be truncated!");
+            if (this.FileWatcher != null && this.FileWatcher.Started)
+                this.buttonWatch_Click(null, null);
+            this.Local.Cwd.DeleteAll();
+            foreach (FtpItem ftpItem in this.Ftp.Cwd.Items)
+                this.Ftp.Download(ftpItem, this.Local.Cwd);
+        }
+
         private void listViewLocal_DoubleClick(object sender, EventArgs e)
         {
             if (this.listViewLocal.SelectedItems.Count == 1)
@@ -116,15 +149,18 @@ namespace RemoteDrive
                     this.Local.Cwd.GetCwd(localItem.FullPath);
             }
         }
+
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            if(!String.IsNullOrEmpty(this.Local.Cwd.Root))
+            if (!String.IsNullOrEmpty(this.Local.Cwd.Root))
                 this.Local.Cwd.GetCwd(this.Local.Cwd.Root);
         }
+
         private void buttonGo_Click(object sender, EventArgs e)
         {
             this.Local.Cwd.GetCwd(this.Local.Cwd.FullPath);
         }
+
         private void RemoteDriveForm_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -155,14 +191,14 @@ namespace RemoteDrive
         }
         private void menuItemAbout_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Application.ProductName + ", " + Application.ProductVersion );
+            MessageBox.Show(Application.ProductName + ", " + Application.ProductVersion);
         }
         private void menuItemLogin_Click(object sender, EventArgs e)
         {
             object newIco = Resource.media_black;
             this.notifyIcon.Icon = Resource.media_white;
             AuthorizeForm loginDialog = new AuthorizeForm(AuthorizeForm.FormTypes.Login);
-            if(loginDialog.ShowDialog() == DialogResult.OK)
+            if (loginDialog.ShowDialog() == DialogResult.OK)
             {
                 this.User = this.ServiceClient.Login(loginDialog.Login, loginDialog.Password);
                 if (this.IsLoggedIn())
@@ -211,29 +247,6 @@ namespace RemoteDrive
         {
             this.menuItemMainWindow_Click(sender, e);
         }
-        #region Custom functions
-        private void SetLoggedInState(bool enabled = true)
-        {
-            if (enabled)
-            {
-                this.menuItemMainWindow.Enabled = true;
-                this.menuItemAuthorize.Visible = false;
-                this.menuItemLogOut.Visible = true;
-            }
-            else
-            {
-                this.menuItemMainWindow.Enabled = false;
-                this.menuItemAuthorize.Visible = true;
-                this.menuItemLogOut.Visible = false;
-            }
-        }
-        private bool IsLoggedIn()
-        {
-            return this.User != null;
-        }
-        #endregion
-
-        #region Context menus and buttons handlers
 
         private void menuItemDeleteLocal_Click(object sender, EventArgs e)
         {
@@ -242,11 +255,6 @@ namespace RemoteDrive
                 LocalItem localItem = this.listViewLocal.SelectedItems[0].Tag as LocalItem;
                 this.Local.Cwd.DeleteItem(localItem);
             }
-        }
-
-        private void menuItemNewFolderLocal_Click(object sender, EventArgs e)
-        {
-            this.Local.Cwd.AddFolder();
         }
 
         private void menuItemUploadLocal_Click(object sender, EventArgs e)
@@ -310,6 +318,13 @@ namespace RemoteDrive
                 this.buttonWatch.Text = "Watch";
             }
         }
+
+        private void menuItemAutoStart_Click(object sender, EventArgs e)
+        {
+            this.menuItemAutoStart.Checked = !this.menuItemAutoStart.Checked;
+            this.SetAutostart(this.menuItemAutoStart.Checked);
+        }
+
         #endregion
 
         #region File watcher handlers
@@ -321,6 +336,7 @@ namespace RemoteDrive
                 this.Ftp.Update(e.FullPath, this.FtpPath.Resolve(e.FullPath));
             }
         }
+
         private void OnFileCreated(object source, FileSystemEventArgs e)
         { // We react on directory events only, no files.
             if (e.ChangeType == WatcherChangeTypes.Created)
@@ -328,9 +344,12 @@ namespace RemoteDrive
                 this.notifyIcon.Icon = Resource.media_white;
                 if (Directory.Exists(e.FullPath))
                     this.Ftp.CreateDirectory(this.FtpPath.Resolve(e.FullPath));
+                else
+                    this.Ftp.CreateFileOnly(this.FtpPath.Resolve(e.FullPath));
                 this.Local.Cwd.GetCwd();
             }
         }
+
         private void OnFileDeleted(object source, FileSystemEventArgs e)
         {
             if (e.ChangeType == WatcherChangeTypes.Deleted)
@@ -342,11 +361,110 @@ namespace RemoteDrive
                 this.Local.Cwd.GetCwd();
             }
         }
+
         private void OnFileRenamed(object source, RenamedEventArgs e)
         {
             if (e.ChangeType == WatcherChangeTypes.Renamed)
                 throw new NotImplementedException();
         }
         #endregion
+
+        #region Autostart
+
+        private bool AutostartExist()
+        {
+            var shortcutName = Application.ProductName + ".lnk";
+            var startupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), shortcutName);
+            return File.Exists(startupPath);
+        }
+
+        private void SetAutostart(bool state)
+        {
+            this.CreateShortcut();
+            var shortcutName = Application.ProductName + ".lnk";
+            FileInfo shortcutInfo = new FileInfo(shortcutName);
+            var startupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), shortcutName);
+            if (state)
+            {
+                if(!this.AutostartExist())
+                    File.Copy(shortcutInfo.FullName, startupPath);
+            }
+            else
+            {
+                if (this.AutostartExist())
+                    File.Delete(startupPath);
+            } 
+        }
+
+        private void ManageAutostart()
+        {
+            try
+            {
+                if (this.AutostartExist())
+                    this.menuItemAutoStart.Checked = true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                this.menuItemAutoStart.Enabled = false;
+            }
+        }
+
+        private void CreateShortcut()
+        {
+            var shortcutName = Application.ProductName + ".lnk";
+            FileInfo shortcutInfo = new FileInfo(shortcutName);
+            if (!shortcutInfo.Exists)
+            {
+                Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")); //Windows Script Host Shell Object
+                dynamic shell = Activator.CreateInstance(t);
+                try
+                {
+                    var lnk = shell.CreateShortcut(Application.ProductName + ".lnk");
+                    try
+                    {
+                        lnk.TargetPath = Path.Combine(Directory.GetCurrentDirectory(), Application.ExecutablePath);
+                        lnk.IconLocation = Application.ExecutablePath;
+                        lnk.Save();
+                    }
+                    finally
+                    {
+                        Marshal.FinalReleaseComObject(lnk);
+                    }
+                }
+                finally
+                {
+                    Marshal.FinalReleaseComObject(shell);
+                }
+            }
+        }
+
+        #endregion
+
+        private void menuItemCreateFile_Click(object sender, EventArgs e)
+        {
+            if(!String.IsNullOrEmpty(this.menuItemFileName.Text.Trim()) &&
+                this.menuItemFileName.Text.Trim() != "Name...")
+                this.Local.Cwd.AddFile(this.menuItemFileName.Text.Trim());
+            this.menuItemFileName.Text = "Name...";
+        }
+
+        private void menuItemOpen_Click(object sender, EventArgs e)
+        {
+            if (this.listViewLocal.SelectedItems.Count == 1)
+            {
+                LocalItem localItem = this.listViewLocal.SelectedItems[0].Tag as LocalItem;
+                if (localItem.Type == LocalItemType.File)
+                    Process.Start(localItem.FullPath);
+            }
+        }
+
+        private void createFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(this.menuItemFolderName.Text.Trim()) &&
+                this.menuItemFolderName.Text.Trim() != "Name...")
+                this.Local.Cwd.AddFolder(this.menuItemFolderName.Text.Trim());
+            this.menuItemFolderName.Text = "Name...";
+        }
     }
 }
