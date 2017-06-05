@@ -106,21 +106,288 @@ namespace RemoteDrive.ServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RemoteDriveItem", Namespace="http://schemas.datacontract.org/2004/07/RemoteDriveService")]
+    [System.SerializableAttribute()]
+    public partial class RemoteDriveItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime AccessedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] BinaryField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime ChangedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RemoteDrive.ServiceReference.RemoteDriveItem.RemoteDriveCompareStates CompareStateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime CreatedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FullPathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long LengthField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool LoadedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ParentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RemoteDrive.ServiceReference.RemoteDriveItem[] RemoteDriveItemsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RemoteDrive.ServiceReference.RemoteDriveItem.RemoteDriveTypes TypeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Accessed {
+            get {
+                return this.AccessedField;
+            }
+            set {
+                if ((this.AccessedField.Equals(value) != true)) {
+                    this.AccessedField = value;
+                    this.RaisePropertyChanged("Accessed");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte[] Binary {
+            get {
+                return this.BinaryField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BinaryField, value) != true)) {
+                    this.BinaryField = value;
+                    this.RaisePropertyChanged("Binary");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Changed {
+            get {
+                return this.ChangedField;
+            }
+            set {
+                if ((this.ChangedField.Equals(value) != true)) {
+                    this.ChangedField = value;
+                    this.RaisePropertyChanged("Changed");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public RemoteDrive.ServiceReference.RemoteDriveItem.RemoteDriveCompareStates CompareState {
+            get {
+                return this.CompareStateField;
+            }
+            set {
+                if ((this.CompareStateField.Equals(value) != true)) {
+                    this.CompareStateField = value;
+                    this.RaisePropertyChanged("CompareState");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Created {
+            get {
+                return this.CreatedField;
+            }
+            set {
+                if ((this.CreatedField.Equals(value) != true)) {
+                    this.CreatedField = value;
+                    this.RaisePropertyChanged("Created");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FullPath {
+            get {
+                return this.FullPathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FullPathField, value) != true)) {
+                    this.FullPathField = value;
+                    this.RaisePropertyChanged("FullPath");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Length {
+            get {
+                return this.LengthField;
+            }
+            set {
+                if ((this.LengthField.Equals(value) != true)) {
+                    this.LengthField = value;
+                    this.RaisePropertyChanged("Length");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Loaded {
+            get {
+                return this.LoadedField;
+            }
+            set {
+                if ((this.LoadedField.Equals(value) != true)) {
+                    this.LoadedField = value;
+                    this.RaisePropertyChanged("Loaded");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Parent {
+            get {
+                return this.ParentField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ParentField, value) != true)) {
+                    this.ParentField = value;
+                    this.RaisePropertyChanged("Parent");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public RemoteDrive.ServiceReference.RemoteDriveItem[] RemoteDriveItems {
+            get {
+                return this.RemoteDriveItemsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RemoteDriveItemsField, value) != true)) {
+                    this.RemoteDriveItemsField = value;
+                    this.RaisePropertyChanged("RemoteDriveItems");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public RemoteDrive.ServiceReference.RemoteDriveItem.RemoteDriveTypes Type {
+            get {
+                return this.TypeField;
+            }
+            set {
+                if ((this.TypeField.Equals(value) != true)) {
+                    this.TypeField = value;
+                    this.RaisePropertyChanged("Type");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+        [System.Runtime.Serialization.DataContractAttribute(Name="RemoteDriveItem.RemoteDriveCompareStates", Namespace="http://schemas.datacontract.org/2004/07/RemoteDriveService")]
+        public enum RemoteDriveCompareStates : int {
+            
+            [System.Runtime.Serialization.EnumMemberAttribute()]
+            NotCompared = 0,
+            
+            [System.Runtime.Serialization.EnumMemberAttribute()]
+            NameMatches = 1,
+            
+            [System.Runtime.Serialization.EnumMemberAttribute()]
+            NameAndSizeMatches = 2,
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+        [System.Runtime.Serialization.DataContractAttribute(Name="RemoteDriveItem.RemoteDriveTypes", Namespace="http://schemas.datacontract.org/2004/07/RemoteDriveService")]
+        public enum RemoteDriveTypes : int {
+            
+            [System.Runtime.Serialization.EnumMemberAttribute()]
+            Empty = 0,
+            
+            [System.Runtime.Serialization.EnumMemberAttribute()]
+            File = 1,
+            
+            [System.Runtime.Serialization.EnumMemberAttribute()]
+            Directory = 2,
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference.IService")]
     public interface IService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/CreateUser", ReplyAction="http://tempuri.org/IService/CreateUserResponse")]
-        bool CreateUser(string mail, string pass, string root);
+        bool CreateUser(string mail, string pass);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/CreateUser", ReplyAction="http://tempuri.org/IService/CreateUserResponse")]
-        System.Threading.Tasks.Task<bool> CreateUserAsync(string mail, string pass, string root);
+        System.Threading.Tasks.Task<bool> CreateUserAsync(string mail, string pass);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/Login", ReplyAction="http://tempuri.org/IService/LoginResponse")]
         RemoteDrive.ServiceReference.User Login(string mail, string pass);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/Login", ReplyAction="http://tempuri.org/IService/LoginResponse")]
         System.Threading.Tasks.Task<RemoteDrive.ServiceReference.User> LoginAsync(string mail, string pass);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/CreateItem", ReplyAction="http://tempuri.org/IService/CreateItemResponse")]
+        bool CreateItem(RemoteDrive.ServiceReference.RemoteDriveItem item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/CreateItem", ReplyAction="http://tempuri.org/IService/CreateItemResponse")]
+        System.Threading.Tasks.Task<bool> CreateItemAsync(RemoteDrive.ServiceReference.RemoteDriveItem item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/DeleteItem", ReplyAction="http://tempuri.org/IService/DeleteItemResponse")]
+        bool DeleteItem(RemoteDrive.ServiceReference.RemoteDriveItem item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/DeleteItem", ReplyAction="http://tempuri.org/IService/DeleteItemResponse")]
+        System.Threading.Tasks.Task<bool> DeleteItemAsync(RemoteDrive.ServiceReference.RemoteDriveItem item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ReadItem", ReplyAction="http://tempuri.org/IService/ReadItemResponse")]
+        RemoteDrive.ServiceReference.RemoteDriveItem ReadItem(string path);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ReadItem", ReplyAction="http://tempuri.org/IService/ReadItemResponse")]
+        System.Threading.Tasks.Task<RemoteDrive.ServiceReference.RemoteDriveItem> ReadItemAsync(string path);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -150,12 +417,12 @@ namespace RemoteDrive.ServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public bool CreateUser(string mail, string pass, string root) {
-            return base.Channel.CreateUser(mail, pass, root);
+        public bool CreateUser(string mail, string pass) {
+            return base.Channel.CreateUser(mail, pass);
         }
         
-        public System.Threading.Tasks.Task<bool> CreateUserAsync(string mail, string pass, string root) {
-            return base.Channel.CreateUserAsync(mail, pass, root);
+        public System.Threading.Tasks.Task<bool> CreateUserAsync(string mail, string pass) {
+            return base.Channel.CreateUserAsync(mail, pass);
         }
         
         public RemoteDrive.ServiceReference.User Login(string mail, string pass) {
@@ -164,6 +431,30 @@ namespace RemoteDrive.ServiceReference {
         
         public System.Threading.Tasks.Task<RemoteDrive.ServiceReference.User> LoginAsync(string mail, string pass) {
             return base.Channel.LoginAsync(mail, pass);
+        }
+        
+        public bool CreateItem(RemoteDrive.ServiceReference.RemoteDriveItem item) {
+            return base.Channel.CreateItem(item);
+        }
+        
+        public System.Threading.Tasks.Task<bool> CreateItemAsync(RemoteDrive.ServiceReference.RemoteDriveItem item) {
+            return base.Channel.CreateItemAsync(item);
+        }
+        
+        public bool DeleteItem(RemoteDrive.ServiceReference.RemoteDriveItem item) {
+            return base.Channel.DeleteItem(item);
+        }
+        
+        public System.Threading.Tasks.Task<bool> DeleteItemAsync(RemoteDrive.ServiceReference.RemoteDriveItem item) {
+            return base.Channel.DeleteItemAsync(item);
+        }
+        
+        public RemoteDrive.ServiceReference.RemoteDriveItem ReadItem(string path) {
+            return base.Channel.ReadItem(path);
+        }
+        
+        public System.Threading.Tasks.Task<RemoteDrive.ServiceReference.RemoteDriveItem> ReadItemAsync(string path) {
+            return base.Channel.ReadItemAsync(path);
         }
     }
 }

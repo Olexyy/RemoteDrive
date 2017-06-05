@@ -81,6 +81,7 @@
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -100,18 +101,16 @@
       <DependentUpon>AuthorizeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FileWatcher.cs" />
-    <Compile Include="FtpPath.cs" />
-    <Compile Include="Local.cs" />
     <Compile Include="Hashing.cs" />
-    <Compile Include="PatternComposite.cs" />
-    <Compile Include="Ftp.cs" />
+    <Compile Include="RemoteDriveBase.cs" />
     <Compile Include="RemoteDriveForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="RemoteDriveForm.Designer.cs">
       <DependentUpon>RemoteDriveForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FtpClient.cs" />
+    <Compile Include="RemoteDriveItem.cs" />
+    <Compile Include="RemoteDrivePath.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -154,6 +153,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\ServiceReference\RemoteDrive.ServiceReference.RemoteDriveItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ServiceReference\RemoteDrive.ServiceReference.User.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

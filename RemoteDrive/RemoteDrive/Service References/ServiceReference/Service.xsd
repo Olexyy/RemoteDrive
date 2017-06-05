@@ -9,4 +9,43 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="User" nillable="true" type="tns:User" />
+  <xs:complexType name="RemoteDriveItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Accessed" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Binary" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="Changed" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="CompareState" type="tns:RemoteDriveItem.RemoteDriveCompareStates" />
+      <xs:element minOccurs="0" name="Created" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="FullPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Length" type="xs:long" />
+      <xs:element minOccurs="0" name="Loaded" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Parent" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RemoteDriveItems" nillable="true" type="tns:ArrayOfRemoteDriveItem" />
+      <xs:element minOccurs="0" name="Type" type="tns:RemoteDriveItem.RemoteDriveTypes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RemoteDriveItem" nillable="true" type="tns:RemoteDriveItem" />
+  <xs:simpleType name="RemoteDriveItem.RemoteDriveCompareStates">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NotCompared" />
+      <xs:enumeration value="NameMatches" />
+      <xs:enumeration value="NameAndSizeMatches" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RemoteDriveItem.RemoteDriveCompareStates" nillable="true" type="tns:RemoteDriveItem.RemoteDriveCompareStates" />
+  <xs:complexType name="ArrayOfRemoteDriveItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RemoteDriveItem" nillable="true" type="tns:RemoteDriveItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfRemoteDriveItem" nillable="true" type="tns:ArrayOfRemoteDriveItem" />
+  <xs:simpleType name="RemoteDriveItem.RemoteDriveTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Empty" />
+      <xs:enumeration value="File" />
+      <xs:enumeration value="Directory" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RemoteDriveItem.RemoteDriveTypes" nillable="true" type="tns:RemoteDriveItem.RemoteDriveTypes" />
 </xs:schema>

@@ -26,12 +26,11 @@ namespace RemoteDriveService
         [DataMember]
         public string Root { get; set; }
         public User() { }
-        public User(string email, string pass, string root = null)
+        public User(string email, string pass)
         {
             this.Email = email;
             this.Pass = Hashing.GetHashString(pass);
-            if(root != null)
-                this.Root = Path.Combine(root, Hashing.GetHashString(email));
+            this.Root = Hashing.GetHashString(Email);
         }
     }
 

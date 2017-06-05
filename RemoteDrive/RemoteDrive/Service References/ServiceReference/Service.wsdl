@@ -30,6 +30,24 @@
   <wsdl:message name="IService_Login_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoginResponse" />
   </wsdl:message>
+  <wsdl:message name="IService_CreateItem_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateItem" />
+  </wsdl:message>
+  <wsdl:message name="IService_CreateItem_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateItemResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService_DeleteItem_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteItem" />
+  </wsdl:message>
+  <wsdl:message name="IService_DeleteItem_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteItemResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService_ReadItem_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReadItem" />
+  </wsdl:message>
+  <wsdl:message name="IService_ReadItem_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReadItemResponse" />
+  </wsdl:message>
   <wsdl:portType name="IService">
     <wsdl:operation name="CreateUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/CreateUser" message="tns:IService_CreateUser_InputMessage" />
@@ -38,6 +56,18 @@
     <wsdl:operation name="Login">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/Login" message="tns:IService_Login_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService/LoginResponse" message="tns:IService_Login_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateItem">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService/CreateItem" message="tns:IService_CreateItem_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService/CreateItemResponse" message="tns:IService_CreateItem_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteItem">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService/DeleteItem" message="tns:IService_DeleteItem_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService/DeleteItemResponse" message="tns:IService_DeleteItem_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReadItem">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService/ReadItem" message="tns:IService_ReadItem_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService/ReadItemResponse" message="tns:IService_ReadItem_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSHttpBinding_IService" type="tns:IService">
@@ -54,6 +84,33 @@
     </wsdl:operation>
     <wsdl:operation name="Login">
       <soap12:operation soapAction="http://tempuri.org/IService/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateItem">
+      <soap12:operation soapAction="http://tempuri.org/IService/CreateItem" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteItem">
+      <soap12:operation soapAction="http://tempuri.org/IService/DeleteItem" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReadItem">
+      <soap12:operation soapAction="http://tempuri.org/IService/ReadItem" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -11,10 +11,21 @@ namespace RemoteDriveService
     [ServiceContract]
     public interface IService
     {
+
         [OperationContract]
-        bool CreateUser(string mail, string pass, string root);
+        bool CreateUser(string mail, string pass);
 
         [OperationContract]
         User Login(string mail, string pass);
+
+        [OperationContract]
+        bool CreateItem(RemoteDriveItem item);
+
+        [OperationContract]
+        bool DeleteItem(RemoteDriveItem item);
+
+        [OperationContract]
+        RemoteDriveItem ReadItem(string path);
+
     }
 }
