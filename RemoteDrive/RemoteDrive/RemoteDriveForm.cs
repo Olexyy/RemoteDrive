@@ -339,9 +339,12 @@ namespace RemoteDrive
         {
             if (this.FileWatcher.Started)
                 this.buttonWatch_Click(null, null);
-            foreach (RemoteDriveItem remoteItem in this.RemoteDrive.DirectoryLocal.Children())
-                if (!remoteItem.NameAndSizeMatches())
-                    this.RemoteDrive.Download(remoteItem.FullPath);
+            foreach (RemoteDriveItem child in this.RemoteDrive.DirectoryLocal.Children())
+                if (!child.NameAndSizeMatches() || !child.NameMatches())
+                    this.RemoteDrive.Download(child.FullPath);
+            foreach (RemoteDriveItem child in this.RemoteDrive.DirectoryLocal.Children())
+                if (!child.NameMatches())
+                    this.RemoteDrive.DeleteLocal(child);
         }
         private void buttonPush_Click(object sender, EventArgs e)
         {

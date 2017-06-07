@@ -79,6 +79,7 @@
             this.groupBoxActions = new System.Windows.Forms.GroupBox();
             this.groupBoxnfo = new System.Windows.Forms.GroupBox();
             this.buttonMergeLocal = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuLocal.SuspendLayout();
             this.contextMenuMain.SuspendLayout();
             this.groupBoxRepoBrowser.SuspendLayout();
@@ -261,6 +262,8 @@
             this.buttonPull.Size = new System.Drawing.Size(89, 23);
             this.buttonPull.TabIndex = 11;
             this.buttonPull.Text = "Pull";
+            this.toolTip.SetToolTip(this.buttonPull, "All non equal and not existant files\r\nfrom remote will be downloaded.\r\nFiles that" +
+        " not exist on remote \r\nwill be deleted.");
             this.buttonPull.UseVisualStyleBackColor = true;
             this.buttonPull.Click += new System.EventHandler(this.buttonPull_Click);
             // 
@@ -404,6 +407,8 @@
             this.buttonMergeRemote.Size = new System.Drawing.Size(89, 23);
             this.buttonMergeRemote.TabIndex = 17;
             this.buttonMergeRemote.Text = "Merge (remote)";
+            this.toolTip.SetToolTip(this.buttonMergeRemote, "All non equal and not existant files\r\nfrom remote will be downloaded.\r\nFiles that" +
+        " not exist on remote \r\nwill be uploaded.\r\n(Remote priority)");
             this.buttonMergeRemote.UseVisualStyleBackColor = true;
             this.buttonMergeRemote.Click += new System.EventHandler(this.buttonMergeRemote_Click);
             // 
@@ -414,6 +419,8 @@
             this.buttonPush.Size = new System.Drawing.Size(89, 23);
             this.buttonPush.TabIndex = 15;
             this.buttonPush.Text = "Push";
+            this.toolTip.SetToolTip(this.buttonPush, "All non equal and not existant files\r\nfrom local will be uploaded.\r\nFiles that no" +
+        "t exist on local \r\nwill be deleted.");
             this.buttonPush.UseVisualStyleBackColor = true;
             this.buttonPush.Click += new System.EventHandler(this.buttonPush_Click);
             // 
@@ -503,6 +510,8 @@
             this.buttonMergeLocal.Size = new System.Drawing.Size(89, 23);
             this.buttonMergeLocal.TabIndex = 18;
             this.buttonMergeLocal.Text = "Merge (local)";
+            this.toolTip.SetToolTip(this.buttonMergeLocal, "All non equal and not existant files\r\nfrom local will be uploaded.\r\nFiles that no" +
+        "t exist on local \r\nwill be downloaded.\r\n(Local priority)");
             this.buttonMergeLocal.UseVisualStyleBackColor = true;
             this.buttonMergeLocal.Click += new System.EventHandler(this.buttonMergeLocal_Click);
             // 
@@ -585,6 +594,7 @@
         private System.Windows.Forms.GroupBox groupBoxActions;
         private System.Windows.Forms.GroupBox groupBoxnfo;
         private System.Windows.Forms.Button buttonMergeLocal;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
 
