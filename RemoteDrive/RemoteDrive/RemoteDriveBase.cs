@@ -12,7 +12,7 @@ namespace RemoteDrive
         CreateRemoteBegin, CreateRemoteOk, CreateRemoteFail, DeleteRemoteBegin, DeleteRemoteOk, DeleteRemoteFail,
         CreateLocalBegin, CreateLocalOk, CreateLocalFail, ReadRemoteBegin, ReadRemoteOk, ReadRemoteFail,
         ReadLocalBegin, ReadLocalOk, ReadLocalFail, DownloadBegin, DownloadOk, DownloadFail, DeleteLocalOk,
-        DeleteLocalFail, DeleteLocalBegin, 
+        DeleteLocalFail, DeleteLocalBegin, MoveRemoteBegin, MoveRemoteOk, MoveRemoteFail,
     }
 
     public class RemoteDriveEventArgs : EventArgs
@@ -183,6 +183,40 @@ namespace RemoteDrive
             catch (Exception e)
             {
                 this.InvokeRemoteDriveEvent(RemoteDriveEventType.DeleteLocalFail, null, null, e);
+            }
+        }
+        public void MoveRemote(RemoteDriveItem item, string newPath)
+        {
+            Task.Run(() => this.MoveRemoteThread(item, newPath));
+            this.InvokeRemoteDriveEvent(RemoteDriveEventType.MoveRemoteBegin);
+        }
+        private void MoveRemoteThread(RemoteDriveItem item, string newPath)
+        {
+            try
+            {
+                this.ServiceClient.MoveItem(item, newPath);
+                this.InvokeRemoteDriveEvent(RemoteDriveEventType.MoveRemoteOk);
+            }
+            catch (Exception e)
+            {
+                this.InvokeRemoteDriveEvent(RemoteDriveEventType.MoveRemoteFail, null, null, e);
+            }
+        }
+        public void CreateLocal(RemoteDriveItem item)
+        {
+            Task.Run(() => this.CreateLocalThread(item));
+            this.InvokeRemoteDriveEvent(RemoteDriveEventType.CreateLocalBegin);
+        }
+        private void CreateLocalThread(RemoteDriveItem item)
+        {
+            try
+            {
+                item.Create();
+                this.InvokeRemoteDriveEvent(RemoteDriveEventType.CreateLocalOk);
+            }
+            catch (Exception e)
+            {
+                this.InvokeRemoteDriveEvent(RemoteDriveEventType.CreateLocalFail, null, null, e);
             }
         }
         public void ClearDirectories()

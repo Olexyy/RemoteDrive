@@ -95,7 +95,7 @@ namespace RemoteDriveService
         {
             if (this.IsFile())
             {
-                using (FileStream fileStream = File.Open(this.FullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+                using (FileStream fileStream = File.Open(this.FullPath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
                 {
                     this.Binary = this.StreamToBytes(fileStream);
                 }
@@ -107,6 +107,8 @@ namespace RemoteDriveService
                 this.Type = RemoteDriveTypes.File;
             else if (this.ExistsAsDirectory())
                 this.Type = RemoteDriveTypes.Directory;
+            else
+                this.Type = RemoteDriveTypes.Empty;
         }
         private void GetChildren()
         {
@@ -171,7 +173,13 @@ namespace RemoteDriveService
         }
         public bool Exists()
         {
-            return this.ExistsAsFile() || this.ExistsAsDirectory();
+            bool existsAsDirectory = this.ExistsAsDirectory();
+            if (existsAsDirectory)
+                this.Type = RemoteDriveTypes.Directory;
+            bool existsAsFile = this.ExistsAsFile();
+            if (existsAsFile)
+                this.Type = RemoteDriveTypes.File;
+            return existsAsDirectory || existsAsFile;
         }
         public bool SystemInfoExists()
         {
@@ -307,6 +315,16 @@ namespace RemoteDriveService
                 fileSteram.CopyTo(memoryStream);
                 return memoryStream.ToArray();
             }
+        }
+        public RemoteDriveItem SetTypeDirectory()
+        {
+            this.Type = RemoteDriveTypes.Directory;
+            return this;
+        }
+        public RemoteDriveItem SetTypeFile()
+        {
+            this.Type = RemoteDriveTypes.File;
+            return this;
         }
     }
 }

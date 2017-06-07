@@ -27,5 +27,8 @@ namespace RemoteDriveService
         [OperationContract]
         RemoteDriveItem ReadItem(string path);
 
+        [OperationContract]
+        bool MoveItem(RemoteDriveItem item, string newPath);
+
     }
 }

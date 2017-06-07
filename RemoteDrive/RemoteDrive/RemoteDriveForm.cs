@@ -20,6 +20,7 @@ namespace RemoteDrive
         private RemoteDrivePath PathResolver { get; set; }
         private RemoteDriveBase RemoteDrive { get; set; }
         private bool CompareTrigger { get; set; }
+        private bool CanWatch { get; set; }
         public RemoteDriveForm()
         {
             this.InitializeComponent();
@@ -36,6 +37,7 @@ namespace RemoteDrive
         }
         private void Compare()
         {
+            this.CanWatch = true;
             List<RemoteDriveItem> remoteDriveItems = this.RemoteDrive.DirectoryRemote.Children().ToList();
             foreach (ListViewItem listViewItem in this.listViewLocal.Items)
             {
@@ -48,12 +50,22 @@ namespace RemoteDrive
                         if(item.NameAndSizeMatches())
                             listViewItem.ForeColor = Color.Green;
                         else if(item.NameMatches())
+                        {
                             listViewItem.ForeColor = Color.Orange;
+                            this.CanWatch = false;
+                        }   
                         trigger = true;
                     }
                 }
                 if (!trigger)
+                {
                     listViewItem.ForeColor = Color.Red;
+                    this.CanWatch = false;
+                }
+                if(this.RemoteDrive.DirectoryLocal.Name == User.Root)
+                    this.buttonWatch.Enabled = true;
+                else
+                    this.buttonWatch.Enabled = false;
             }
             foreach(RemoteDriveItem remoteItem in remoteDriveItems)
                 if(remoteItem.NotMatched())
@@ -87,13 +99,13 @@ namespace RemoteDrive
             }
             if (args.Type == RemoteDriveEventType.DownloadOk || args.Type == RemoteDriveEventType.DeleteLocalOk ||
                 args.Type == RemoteDriveEventType.CreateLocalOk || args.Type == RemoteDriveEventType.CreateRemoteOk || 
-                args.Type == RemoteDriveEventType.DeleteRemoteOk)
+                args.Type == RemoteDriveEventType.DeleteRemoteOk || args.Type == RemoteDriveEventType.MoveRemoteOk)
             {
                 this.Invoke(new Action(() => { this.RemoteDrive.Navigate(this.RemoteDrive.DirectoryLocal.FullPath); }));
             }
             if (args.Type == RemoteDriveEventType.CreateLocalBegin || args.Type == RemoteDriveEventType.CreateRemoteBegin ||
                 args.Type == RemoteDriveEventType.DeleteRemoteBegin || args.Type == RemoteDriveEventType.DownloadBegin ||
-                args.Type == RemoteDriveEventType.DeleteLocalBegin)
+                args.Type == RemoteDriveEventType.DeleteLocalBegin || args.Type == RemoteDriveEventType.MoveRemoteBegin)
             {
                 this.Invoke(new Action(() => { this.notifyIcon.Icon = Resource.media_white; }));
             }
@@ -118,6 +130,8 @@ namespace RemoteDrive
                 this.RemoteDrive = new RemoteDriveBase(this.ServiceClient, this.PathResolver, this.RemoteDriveEventHandler);
                 this.RemoteDrive.ReadDirectoryRemote(this.PathResolver.UserRoot);
                 this.RemoteDrive.ReadDirectoryLocal(this.PathResolver.UserPath);
+                this.FileWatcher = new FileWatcher(this.RemoteDrive.DirectoryLocal.FullPath, this.OnFileChanged, this.OnFileCreated,
+                this.OnFileDeleted, this.OnFileRenamed);
             }
             else
             {
@@ -128,6 +142,7 @@ namespace RemoteDrive
                 this.RemoteDrive.ClearDirectories();
                 this.RemoteDrive = null;
                 this.User = null;
+                this.FileWatcher = null;
             }
         }
         private bool IsLoggedIn()
@@ -137,17 +152,6 @@ namespace RemoteDrive
         #endregion
 
         #region Context menus and buttons handlers
-
-
-        private void buttonPull_Click(object sender, EventArgs e)
-        {
-            if (this.RemoteDrive.DirectoryLocal.Children().ToList().Count > 0)
-                MessageBox.Show("Local directory not empty and will be truncated!");
-            if (this.FileWatcher != null && this.FileWatcher.Started)
-                this.buttonWatch_Click(null, null);
-            this.RemoteDrive.DirectoryLocal.Children().ToList().ForEach(i => i.Delete());
-            this.RemoteDrive.Download(this.RemoteDrive.DirectoryRemote.FullPath);
-        }
 
         private void listViewLocal_DoubleClick(object sender, EventArgs e)
         {
@@ -163,7 +167,6 @@ namespace RemoteDrive
             if (!this.PathResolver.IsHostPath(this.RemoteDrive.DirectoryLocal.Parent))
                 this.RemoteDrive.Navigate(this.RemoteDrive.DirectoryLocal.Parent);
         }
-
         private void RemoteDriveForm_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -247,12 +250,10 @@ namespace RemoteDrive
         {
             this.menuItemMainWindow_Click(sender, e);
         }
-
         private void buttonRefreshLocal_Click(object sender, EventArgs e)
         {
             this.RemoteDrive.Navigate(this.RemoteDrive.DirectoryLocal.FullPath);
         }
-
         private void menuItemDeleteLocal_Click(object sender, EventArgs e)
         {
             if (this.listViewLocal.SelectedItems.Count == 1)
@@ -261,20 +262,18 @@ namespace RemoteDrive
                 this.RemoteDrive.DeleteLocal(item);
             }
         }
-
         private void menuItemUploadLocal_Click(object sender, EventArgs e)
         {
             if (this.listViewLocal.SelectedItems.Count == 1)
             {
-                RemoteDriveItem item = new RemoteDriveItem((this.listViewLocal.SelectedItems[0].Tag as RemoteDriveItem).FullPath);
-                this.RemoteDrive.CreateRemote(item);
+                RemoteDriveItem item = this.listViewLocal.SelectedItems[0].Tag as RemoteDriveItem;
+                this.RemoteDrive.CreateRemote(item.Load());
             }
         }
         private void menuItemOpenLocal_Click(object sender, EventArgs e)
         {
             Process.Start("explorer.exe", this.RemoteDrive.DirectoryLocal.FullPath);
         }
-
         private void menuItemDownload_Click(object sender, EventArgs e)
         {
             if (this.listViewLocal.SelectedItems.Count == 1)
@@ -283,26 +282,25 @@ namespace RemoteDrive
                 this.RemoteDrive.Download(item.FullPath);
             }
         }
-
         private void menuItemDeleteRemote_Click(object sender, EventArgs e)
         {
             if (this.listViewLocal.SelectedItems.Count == 1)
             {
                 RemoteDriveItem item = this.listViewLocal.SelectedItems[0].Tag as RemoteDriveItem;
-                if (item.NameMatches() || item.NameAndSizeMatches())
                     this.RemoteDrive.DeleteRemote(item);
             }
         }
-
         private void buttonWatch_Click(object sender, EventArgs e)
         {
-            if(this.FileWatcher == null || !this.FileWatcher.Started)
+            if(!this.FileWatcher.Started)
             {
-                if (this.FileWatcher == null)
-                    this.FileWatcher = new FileWatcher(User.Root, this.OnFileChanged, this.OnFileCreated,
-                        this.OnFileDeleted, this.OnFileRenamed);
-                this.FileWatcher.Start();
-                this.buttonWatch.Text = "Stop";
+                if (this.CanWatch)
+                {
+                    this.FileWatcher.Start();
+                    this.buttonWatch.Text = "Stop";
+                }
+                else
+                    MessageBox.Show("Local should be syncronized with remote.");
             }
             else
             {
@@ -310,54 +308,105 @@ namespace RemoteDrive
                 this.buttonWatch.Text = "Watch";
             }
         }
-
         private void menuItemAutoStart_Click(object sender, EventArgs e)
         {
             this.menuItemAutoStart.Checked = !this.menuItemAutoStart.Checked;
             this.SetAutostart(this.menuItemAutoStart.Checked);
         }
-
+        private void menuItemCreateFile_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(this.menuItemFileName.Text.Trim()) &&
+                this.menuItemFileName.Text.Trim() != "Name...")
+                this.RemoteDrive.CreateLocal(new RemoteDriveItem(Path.Combine(this.RemoteDrive.DirectoryLocal.FullPath, this.menuItemFileName.Text.Trim())).SetTypeFile());
+            this.menuItemFileName.Text = "Name...";
+        }
+        private void menuItemOpen_Click(object sender, EventArgs e)
+        {
+            if (this.listViewLocal.SelectedItems.Count == 1)
+            {
+                RemoteDriveItem item = this.listViewLocal.SelectedItems[0].Tag as RemoteDriveItem;
+                Process.Start(item.FullPath);
+            }
+        }
+        private void createFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(this.menuItemFolderName.Text.Trim()) &&
+                this.menuItemFolderName.Text.Trim() != "Name...")
+                this.RemoteDrive.CreateLocal(new RemoteDriveItem(Path.Combine(this.RemoteDrive.DirectoryLocal.FullPath, this.menuItemFolderName.Text.Trim())).SetTypeDirectory());
+            this.menuItemFolderName.Text = "Name...";
+        }
+        private void buttonPull_Click(object sender, EventArgs e)
+        {
+            if (this.FileWatcher.Started)
+                this.buttonWatch_Click(null, null);
+            foreach (RemoteDriveItem remoteItem in this.RemoteDrive.DirectoryLocal.Children())
+                if (!remoteItem.NameAndSizeMatches())
+                    this.RemoteDrive.Download(remoteItem.FullPath);
+        }
+        private void buttonPush_Click(object sender, EventArgs e)
+        {
+            if (this.FileWatcher.Started)
+                this.buttonWatch_Click(null, null);
+            foreach (RemoteDriveItem child in this.RemoteDrive.DirectoryLocal.Children())
+                if (!child.NameAndSizeMatches() || !child.NameMatches())
+                    this.RemoteDrive.CreateRemote(child);
+            foreach (RemoteDriveItem child in this.RemoteDrive.DirectoryRemote.Children())
+                if (!child.NameMatches())
+                    this.RemoteDrive.DeleteRemote(child);
+        }
+        private void buttonMergeRemote_Click(object sender, EventArgs e)
+        {
+            if (this.FileWatcher.Started)
+                this.buttonWatch_Click(null, null);
+            foreach (RemoteDriveItem child in this.RemoteDrive.DirectoryRemote.Children())
+                if (!child.NameAndSizeMatches() || !child.NameMatches())
+                    this.RemoteDrive.Download(child.FullPath);
+            foreach (RemoteDriveItem child in this.RemoteDrive.DirectoryLocal.Children())
+                if (!child.NameMatches())
+                    this.RemoteDrive.CreateRemote(child);
+        }
+        private void buttonMergeLocal_Click(object sender, EventArgs e)
+        {
+            if (this.FileWatcher.Started)
+                this.buttonWatch_Click(null, null);
+            foreach (RemoteDriveItem child in this.RemoteDrive.DirectoryLocal.Children())
+                if (!child.NameAndSizeMatches() || !child.NameMatches())
+                    this.RemoteDrive.CreateRemote(child);
+            foreach (RemoteDriveItem child in this.RemoteDrive.DirectoryRemote.Children())
+                if (!child.NameMatches())
+                    this.RemoteDrive.Download(child.FullPath);
+        }
         #endregion
 
         #region File watcher handlers
         private void OnFileChanged(object source, FileSystemEventArgs e)
-        {/* TODO
+        {
             if (e.ChangeType == WatcherChangeTypes.Changed)
             {
-                this.notifyIcon.Icon = Resource.media_white;
-                this.Ftp.Update(e.FullPath, this.FtpPath.Resolve(e.FullPath));
-            }*/
+                this.RemoteDrive.CreateRemote(new RemoteDriveItem(e.FullPath).Load());
+            }
         }
 
         private void OnFileCreated(object source, FileSystemEventArgs e)
-        { // We react on directory events only, no files.
-            /*if (e.ChangeType == WatcherChangeTypes.Created)
+        { // We don't load file or folder, only create.
+            if (e.ChangeType == WatcherChangeTypes.Created)
             {
-                this.notifyIcon.Icon = Resource.media_white;
-                if (Directory.Exists(e.FullPath))
-                    this.Ftp.CreateDirectory(this.FtpPath.Resolve(e.FullPath));
-                else
-                    this.Ftp.CreateFileOnly(this.FtpPath.Resolve(e.FullPath));
-                this.Local.Cwd.GetCwd();
-            }*/
+                this.RemoteDrive.CreateRemote(new RemoteDriveItem(e.FullPath));
+            }
         }
 
         private void OnFileDeleted(object source, FileSystemEventArgs e)
         {
-            /*if (e.ChangeType == WatcherChangeTypes.Deleted)
+            if (e.ChangeType == WatcherChangeTypes.Deleted)
             {
-                this.notifyIcon.Icon = Resource.media_white;
-                if (!String.IsNullOrEmpty(Path.GetExtension(e.Name)))
-                    this.Ftp.DeleteFile(this.FtpPath.Resolve(e.FullPath));
-                else this.Ftp.DeleteFolder(this.FtpPath.Resolve(e.FullPath));
-                this.Local.Cwd.GetCwd();
-            }*/
+                this.RemoteDrive.DeleteRemote(new RemoteDriveItem(e.FullPath));
+            }
         }
 
         private void OnFileRenamed(object source, RenamedEventArgs e)
         {
             if (e.ChangeType == WatcherChangeTypes.Renamed)
-                throw new NotImplementedException();
+                this.RemoteDrive.MoveRemote(new RemoteDriveItem(e.OldFullPath), e.FullPath);
         }
         #endregion
 
@@ -433,36 +482,5 @@ namespace RemoteDrive
 
         #endregion
 
-        private void menuItemCreateFile_Click(object sender, EventArgs e)
-        {
-            if(!String.IsNullOrEmpty(this.menuItemFileName.Text.Trim()) &&
-                this.menuItemFileName.Text.Trim() != "Name...")
-                //TODO!!!//this.Local.Cwd.AddFile(this.menuItemFileName.Text.Trim());
-            this.menuItemFileName.Text = "Name...";
-        }
-
-        private void menuItemOpen_Click(object sender, EventArgs e)
-        {
-            if (this.listViewLocal.SelectedItems.Count == 1)
-            {
-                RemoteDriveItem item = this.listViewLocal.SelectedItems[0].Tag as RemoteDriveItem;
-                Process.Start(item.FullPath);
-            }
-        }
-
-        private void createFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!String.IsNullOrEmpty(this.menuItemFolderName.Text.Trim()) &&
-                this.menuItemFolderName.Text.Trim() != "Name...")
-                //TODO//this.Local.Cwd.AddFolder(this.menuItemFolderName.Text.Trim());
-            this.menuItemFolderName.Text = "Name...";
-        }
-
-
-        private void buttonPush_Click(object sender, EventArgs e)
-        {
-            foreach(RemoteDriveItem child in this.RemoteDrive.DirectoryLocal.Children())
-                this.RemoteDrive.CreateRemote(child);
-        }
     }
 }

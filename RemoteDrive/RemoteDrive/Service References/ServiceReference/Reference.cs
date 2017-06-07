@@ -388,6 +388,12 @@ namespace RemoteDrive.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ReadItem", ReplyAction="http://tempuri.org/IService/ReadItemResponse")]
         System.Threading.Tasks.Task<RemoteDrive.ServiceReference.RemoteDriveItem> ReadItemAsync(string path);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/MoveItem", ReplyAction="http://tempuri.org/IService/MoveItemResponse")]
+        bool MoveItem(RemoteDrive.ServiceReference.RemoteDriveItem item, string newPath);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/MoveItem", ReplyAction="http://tempuri.org/IService/MoveItemResponse")]
+        System.Threading.Tasks.Task<bool> MoveItemAsync(RemoteDrive.ServiceReference.RemoteDriveItem item, string newPath);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -455,6 +461,14 @@ namespace RemoteDrive.ServiceReference {
         
         public System.Threading.Tasks.Task<RemoteDrive.ServiceReference.RemoteDriveItem> ReadItemAsync(string path) {
             return base.Channel.ReadItemAsync(path);
+        }
+        
+        public bool MoveItem(RemoteDrive.ServiceReference.RemoteDriveItem item, string newPath) {
+            return base.Channel.MoveItem(item, newPath);
+        }
+        
+        public System.Threading.Tasks.Task<bool> MoveItemAsync(RemoteDrive.ServiceReference.RemoteDriveItem item, string newPath) {
+            return base.Channel.MoveItemAsync(item, newPath);
         }
     }
 }

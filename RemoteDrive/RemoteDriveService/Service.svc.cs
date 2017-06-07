@@ -69,5 +69,15 @@ namespace RemoteDriveService
             return null;
         }
 
+        public bool MoveItem(RemoteDriveItem item, string newPath)
+        {
+            if (this.LoggedIn())
+            {
+                item.Localize(this.PathResolver).MoveTo(this.PathResolver.Resolve(newPath));
+                return true;
+            }
+            return false;
+        }
+
     }
 }

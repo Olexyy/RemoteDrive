@@ -13,9 +13,9 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://www.webdrive.somee.com/Service.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://www.webdrive.somee.com/Service.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://www.webdrive.somee.com/Service.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/RemoteDriveService" />
+      <xsd:import schemaLocation="http://localhost:63855/Service.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:63855/Service.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:63855/Service.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/RemoteDriveService" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IService_CreateUser_InputMessage">
@@ -48,6 +48,12 @@
   <wsdl:message name="IService_ReadItem_OutputMessage">
     <wsdl:part name="parameters" element="tns:ReadItemResponse" />
   </wsdl:message>
+  <wsdl:message name="IService_MoveItem_InputMessage">
+    <wsdl:part name="parameters" element="tns:MoveItem" />
+  </wsdl:message>
+  <wsdl:message name="IService_MoveItem_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MoveItemResponse" />
+  </wsdl:message>
   <wsdl:portType name="IService">
     <wsdl:operation name="CreateUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/CreateUser" message="tns:IService_CreateUser_InputMessage" />
@@ -68,6 +74,10 @@
     <wsdl:operation name="ReadItem">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/ReadItem" message="tns:IService_ReadItem_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService/ReadItemResponse" message="tns:IService_ReadItem_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MoveItem">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService/MoveItem" message="tns:IService_MoveItem_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService/MoveItemResponse" message="tns:IService_MoveItem_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSHttpBinding_IService" type="tns:IService">
@@ -118,12 +128,21 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MoveItem">
+      <soap12:operation soapAction="http://tempuri.org/IService/MoveItem" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Service">
     <wsdl:port name="WSHttpBinding_IService" binding="tns:WSHttpBinding_IService">
-      <soap12:address location="http://www.webdrive.somee.com/Service.svc/user" />
+      <soap12:address location="http://localhost:63855/Service.svc/user" />
       <wsa10:EndpointReference>
-        <wsa10:Address>http://www.webdrive.somee.com/Service.svc/user</wsa10:Address>
+        <wsa10:Address>http://localhost:63855/Service.svc/user</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

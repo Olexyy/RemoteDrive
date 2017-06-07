@@ -69,7 +69,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxRepoBrowser = new System.Windows.Forms.GroupBox();
-            this.buttonMerge = new System.Windows.Forms.Button();
+            this.buttonMergeRemote = new System.Windows.Forms.Button();
             this.buttonPush = new System.Windows.Forms.Button();
             this.buttonWatch = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -78,6 +78,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.groupBoxActions = new System.Windows.Forms.GroupBox();
             this.groupBoxnfo = new System.Windows.Forms.GroupBox();
+            this.buttonMergeLocal = new System.Windows.Forms.Button();
             this.contextMenuLocal.SuspendLayout();
             this.contextMenuMain.SuspendLayout();
             this.groupBoxRepoBrowser.SuspendLayout();
@@ -255,7 +256,7 @@
             // 
             // buttonPull
             // 
-            this.buttonPull.Location = new System.Drawing.Point(10, 125);
+            this.buttonPull.Location = new System.Drawing.Point(10, 137);
             this.buttonPull.Name = "buttonPull";
             this.buttonPull.Size = new System.Drawing.Size(89, 23);
             this.buttonPull.TabIndex = 11;
@@ -395,19 +396,20 @@
             this.groupBoxRepoBrowser.TabStop = false;
             this.groupBoxRepoBrowser.Text = "Browser";
             // 
-            // buttonMerge
+            // buttonMergeRemote
             // 
-            this.buttonMerge.Enabled = false;
-            this.buttonMerge.Location = new System.Drawing.Point(10, 38);
-            this.buttonMerge.Name = "buttonMerge";
-            this.buttonMerge.Size = new System.Drawing.Size(89, 23);
-            this.buttonMerge.TabIndex = 17;
-            this.buttonMerge.Text = "Merge";
-            this.buttonMerge.UseVisualStyleBackColor = true;
+            this.buttonMergeRemote.Enabled = false;
+            this.buttonMergeRemote.Location = new System.Drawing.Point(10, 108);
+            this.buttonMergeRemote.Name = "buttonMergeRemote";
+            this.buttonMergeRemote.Size = new System.Drawing.Size(89, 23);
+            this.buttonMergeRemote.TabIndex = 17;
+            this.buttonMergeRemote.Text = "Merge (remote)";
+            this.buttonMergeRemote.UseVisualStyleBackColor = true;
+            this.buttonMergeRemote.Click += new System.EventHandler(this.buttonMergeRemote_Click);
             // 
             // buttonPush
             // 
-            this.buttonPush.Location = new System.Drawing.Point(10, 96);
+            this.buttonPush.Location = new System.Drawing.Point(10, 50);
             this.buttonPush.Name = "buttonPush";
             this.buttonPush.Size = new System.Drawing.Size(89, 23);
             this.buttonPush.TabIndex = 15;
@@ -417,8 +419,7 @@
             // 
             // buttonWatch
             // 
-            this.buttonWatch.Enabled = false;
-            this.buttonWatch.Location = new System.Drawing.Point(10, 67);
+            this.buttonWatch.Location = new System.Drawing.Point(10, 19);
             this.buttonWatch.Name = "buttonWatch";
             this.buttonWatch.Size = new System.Drawing.Size(89, 23);
             this.buttonWatch.TabIndex = 14;
@@ -469,13 +470,14 @@
             // 
             // groupBoxActions
             // 
-            this.groupBoxActions.Controls.Add(this.buttonMerge);
+            this.groupBoxActions.Controls.Add(this.buttonMergeLocal);
+            this.groupBoxActions.Controls.Add(this.buttonMergeRemote);
             this.groupBoxActions.Controls.Add(this.buttonPull);
             this.groupBoxActions.Controls.Add(this.buttonWatch);
             this.groupBoxActions.Controls.Add(this.buttonPush);
-            this.groupBoxActions.Location = new System.Drawing.Point(428, 214);
+            this.groupBoxActions.Location = new System.Drawing.Point(428, 203);
             this.groupBoxActions.Name = "groupBoxActions";
-            this.groupBoxActions.Size = new System.Drawing.Size(112, 157);
+            this.groupBoxActions.Size = new System.Drawing.Size(112, 168);
             this.groupBoxActions.TabIndex = 23;
             this.groupBoxActions.TabStop = false;
             this.groupBoxActions.Text = "Actions";
@@ -492,6 +494,17 @@
             this.groupBoxnfo.TabIndex = 24;
             this.groupBoxnfo.TabStop = false;
             this.groupBoxnfo.Text = "Info";
+            // 
+            // buttonMergeLocal
+            // 
+            this.buttonMergeLocal.Enabled = false;
+            this.buttonMergeLocal.Location = new System.Drawing.Point(10, 79);
+            this.buttonMergeLocal.Name = "buttonMergeLocal";
+            this.buttonMergeLocal.Size = new System.Drawing.Size(89, 23);
+            this.buttonMergeLocal.TabIndex = 18;
+            this.buttonMergeLocal.Text = "Merge (local)";
+            this.buttonMergeLocal.UseVisualStyleBackColor = true;
+            this.buttonMergeLocal.Click += new System.EventHandler(this.buttonMergeLocal_Click);
             // 
             // RemoteDriveForm
             // 
@@ -561,7 +574,7 @@
         private System.Windows.Forms.ToolStripTextBox menuItemFolderName;
         private System.Windows.Forms.ToolStripMenuItem createFolderToolStripMenuItem;
         private System.Windows.Forms.Button buttonPush;
-        private System.Windows.Forms.Button buttonMerge;
+        private System.Windows.Forms.Button buttonMergeRemote;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem menuItemDownload;
         private System.Windows.Forms.ToolStripMenuItem menuItemDeleteRemote;
@@ -571,6 +584,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBoxActions;
         private System.Windows.Forms.GroupBox groupBoxnfo;
+        private System.Windows.Forms.Button buttonMergeLocal;
     }
 }
 
