@@ -19,6 +19,9 @@ namespace RemoteDriveService
         User Login(string mail, string pass);
 
         [OperationContract]
+        bool Logout();
+
+        [OperationContract]
         bool CreateItem(RemoteDriveItem item);
 
         [OperationContract]

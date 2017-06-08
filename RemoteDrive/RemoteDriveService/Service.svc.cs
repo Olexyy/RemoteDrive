@@ -44,6 +44,17 @@ namespace RemoteDriveService
             return this.User;
         }
 
+        public bool Logout()
+        {
+            if (this.LoggedIn())
+            {
+                this.PathResolver = null;
+                this.User = null;
+                return true;
+            }
+            return false;
+        }
+
         public bool CreateItem(RemoteDriveItem item)
         {
             if (this.LoggedIn())

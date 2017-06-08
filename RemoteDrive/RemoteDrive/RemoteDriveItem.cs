@@ -11,6 +11,7 @@ namespace RemoteDrive.ServiceReference
         public RemoteDriveItem(string initialPath)
         {
             this.FullPath = initialPath;
+            this.Locker = new object();
             this.SetType();
             if (this.Exists())
             {
@@ -198,53 +199,66 @@ namespace RemoteDrive.ServiceReference
         }
         public bool Create()
         {
-            if (!this.Exists())
+            lock (this.Locker)
             {
-                if (this.IsDirectory())
-                    Directory.CreateDirectory(this.FullPath);
-                else
-                    using (FileStream newFile = File.Create(this.FullPath))
-                    {
-                        if (this.HasBinary())
-                            newFile.Write(this.Binary, 0, this.Binary.Length);
-                    }
-                return true;
-            }
-            return false;
+                if (!this.Exists())
+                {
+                    if (this.IsDirectory())
+                        Directory.CreateDirectory(this.FullPath);
+                    else
+                        using (FileStream newFile = File.Create(this.FullPath))
+                        {
+                            if (this.HasBinary())
+                                newFile.Write(this.Binary, 0, this.Binary.Length);
+                        }
+                    return true;
+                }
+                return false;
+            } 
         }
         public bool CreateOrUpdate()
         {
-            if (!this.Create())
+            lock (this.Locker)
             {
-                if (this.IsFile())
-                    using (FileStream newFile = File.Open(this.FullPath, FileMode.Truncate, FileAccess.ReadWrite, FileShare.None))
-                    {
-                        if (this.HasBinary())
-                            newFile.Write(this.Binary, 0, this.Binary.Length);
-                    }
+                if (!this.Create())
+                {
+                    if (this.IsFile())
+                        using (FileStream newFile = File.Open(this.FullPath, FileMode.Truncate, FileAccess.ReadWrite, FileShare.None))
+                        {
+                            if (this.HasBinary())
+                                newFile.Write(this.Binary, 0, this.Binary.Length);
+                        }
+                    return true;
+                }
                 return true;
             }
-            return true;
         }
         public bool Delete()
         {
-            if (this.Exists())
+            lock (this.Locker)
             {
-                if (this.IsDirectory())
-                    (this.Info() as DirectoryInfo).Delete(true);
-                else if (this.IsFile())
-                    (this.Info() as FileInfo).Delete();
-                return true;
+                if (this.Exists())
+                {
+                    if (this.IsDirectory())
+                        (this.Info() as DirectoryInfo).Delete(true);
+                    else if (this.IsFile())
+                        (this.Info() as FileInfo).Delete();
+                    return true;
+                }
+                return false;
             }
-            return false;
         }
         public void MoveTo(string path)
         {
-            if (this.Exists())
-                if (this.IsFile())
-                    (this.Info() as FileInfo).MoveTo(path);
-                else
-                    (this.Info() as DirectoryInfo).MoveTo(path);
+            lock (this.Locker)
+            {
+                if (this.Exists())
+                    if (this.IsFile())
+                        (this.Info() as FileInfo).MoveTo(path);
+                    else
+                        (this.Info() as DirectoryInfo).MoveTo(path);
+                this.Delete();
+            }
         }
         public IEnumerable<RemoteDriveItem> Children()
         {

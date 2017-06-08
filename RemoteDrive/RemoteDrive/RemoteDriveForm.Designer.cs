@@ -77,8 +77,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBoxActions = new System.Windows.Forms.GroupBox();
-            this.groupBoxnfo = new System.Windows.Forms.GroupBox();
             this.buttonMergeLocal = new System.Windows.Forms.Button();
+            this.groupBoxnfo = new System.Windows.Forms.GroupBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuLocal.SuspendLayout();
             this.contextMenuMain.SuspendLayout();
@@ -401,7 +401,6 @@
             // 
             // buttonMergeRemote
             // 
-            this.buttonMergeRemote.Enabled = false;
             this.buttonMergeRemote.Location = new System.Drawing.Point(10, 108);
             this.buttonMergeRemote.Name = "buttonMergeRemote";
             this.buttonMergeRemote.Size = new System.Drawing.Size(89, 23);
@@ -431,6 +430,8 @@
             this.buttonWatch.Size = new System.Drawing.Size(89, 23);
             this.buttonWatch.TabIndex = 14;
             this.buttonWatch.Text = "Watch";
+            this.toolTip.SetToolTip(this.buttonWatch, "Begins real time automatic syncronize process.\r\nNote, that this works only for cu" +
+        "rrent viewed \r\ndirectory only, not subdirectories.");
             this.buttonWatch.UseVisualStyleBackColor = true;
             this.buttonWatch.Click += new System.EventHandler(this.buttonWatch_Click);
             // 
@@ -489,6 +490,18 @@
             this.groupBoxActions.TabStop = false;
             this.groupBoxActions.Text = "Actions";
             // 
+            // buttonMergeLocal
+            // 
+            this.buttonMergeLocal.Location = new System.Drawing.Point(10, 79);
+            this.buttonMergeLocal.Name = "buttonMergeLocal";
+            this.buttonMergeLocal.Size = new System.Drawing.Size(89, 23);
+            this.buttonMergeLocal.TabIndex = 18;
+            this.buttonMergeLocal.Text = "Merge (local)";
+            this.toolTip.SetToolTip(this.buttonMergeLocal, "All non equal and not existant files\r\nfrom local will be uploaded.\r\nFiles that no" +
+        "t exist on local \r\nwill be downloaded.\r\n(Local priority)");
+            this.buttonMergeLocal.UseVisualStyleBackColor = true;
+            this.buttonMergeLocal.Click += new System.EventHandler(this.buttonMergeLocal_Click);
+            // 
             // groupBoxnfo
             // 
             this.groupBoxnfo.Controls.Add(this.label1);
@@ -501,19 +514,6 @@
             this.groupBoxnfo.TabIndex = 24;
             this.groupBoxnfo.TabStop = false;
             this.groupBoxnfo.Text = "Info";
-            // 
-            // buttonMergeLocal
-            // 
-            this.buttonMergeLocal.Enabled = false;
-            this.buttonMergeLocal.Location = new System.Drawing.Point(10, 79);
-            this.buttonMergeLocal.Name = "buttonMergeLocal";
-            this.buttonMergeLocal.Size = new System.Drawing.Size(89, 23);
-            this.buttonMergeLocal.TabIndex = 18;
-            this.buttonMergeLocal.Text = "Merge (local)";
-            this.toolTip.SetToolTip(this.buttonMergeLocal, "All non equal and not existant files\r\nfrom local will be uploaded.\r\nFiles that no" +
-        "t exist on local \r\nwill be downloaded.\r\n(Local priority)");
-            this.buttonMergeLocal.UseVisualStyleBackColor = true;
-            this.buttonMergeLocal.Click += new System.EventHandler(this.buttonMergeLocal_Click);
             // 
             // RemoteDriveForm
             // 
